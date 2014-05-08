@@ -1,7 +1,15 @@
 package org.mamute.providers;
 
-import java.net.URL;
-import java.util.Map;
+import br.com.caelum.vraptor.environment.Environment;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.mamute.model.*;
+import org.mamute.model.watch.Watcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
@@ -12,31 +20,8 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.interceptor.Interceptor;
 import javax.validation.ValidatorFactory;
-
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
-import org.mamute.model.Answer;
-import org.mamute.model.AnswerInformation;
-import org.mamute.model.Comment;
-import org.mamute.model.Flag;
-import org.mamute.model.LoginMethod;
-import org.mamute.model.News;
-import org.mamute.model.NewsInformation;
-import org.mamute.model.NewsletterSentLog;
-import org.mamute.model.Question;
-import org.mamute.model.QuestionInformation;
-import org.mamute.model.ReputationEvent;
-import org.mamute.model.Tag;
-import org.mamute.model.TagPage;
-import org.mamute.model.User;
-import org.mamute.model.UserSession;
-import org.mamute.model.Vote;
-import org.mamute.model.watch.Watcher;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import br.com.caelum.vraptor.environment.Environment;
+import java.net.URL;
+import java.util.Map;
 
 @ApplicationScoped
 @Alternative
@@ -51,6 +36,7 @@ public class SessionFactoryCreator {
 	private SessionFactory factory;
 	private Environment env;
 	private ValidatorFactory vf;
+    private static ServiceRegistry serviceRegistry;
 
 	@Deprecated
 	public SessionFactoryCreator() {
@@ -84,6 +70,8 @@ public class SessionFactoryCreator {
 			cfg.setProperty("hibernate.connection.password", password);
 		}
 
+
+
 		cfg.addAnnotatedClass(User.class);
 		cfg.addAnnotatedClass(Question.class);
 		cfg.addAnnotatedClass(AnswerInformation.class);
@@ -102,7 +90,30 @@ public class SessionFactoryCreator {
 		cfg.addAnnotatedClass(NewsletterSentLog.class);
 		cfg.addAnnotatedClass(TagPage.class);
 
-		this.factory = cfg.buildSessionFactory();
+      // Hibernate Envers
+      cfg.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+
+      cfg.setProperty("hibernate.ejb.event.post-insert",
+          "org.hibernate.ejb.event.EJB3PostInsertEventListener,org.hibernate.envers.event.AuditEventListener");
+
+      cfg.setProperty("hibernate.ejb.event.post-update",
+          "org.hibernate.ejb.event.EJB3PostUpdateEventListener,org.hibernate.envers.event.AuditEventListener");
+
+      cfg.setProperty("hibernate.ejb.event.post-delete",
+          "org.hibernate.ejb.event.EJB3PostDeleteEventListener,org.hibernate.envers.event.AuditEventListener");
+
+      cfg.setProperty("hibernate.ejb.event.pre-collection-update",
+          "org.hibernate.envers.event.AuditEventListener");
+
+      cfg.setProperty("hibernate.ejb.event.pre-collection-remove",
+          "org.hibernate.envers.event.AuditEventListener");
+
+      cfg.setProperty("hibernate.ejb.event.post-collection-recreate",
+          "org.hibernate.envers.event.AuditEventListener");
+
+      serviceRegistry = new ServiceRegistryBuilder().applySettings(cfg.getProperties()).buildServiceRegistry();
+      this.factory = cfg.buildSessionFactory(serviceRegistry);
+//      		this.factory = cfg.buildSessionFactory();
 		
 	}
 
