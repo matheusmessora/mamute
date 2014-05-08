@@ -1,22 +1,7 @@
 package org.mamute.model;
 
-import static org.mamute.model.MarkDown.parse;
-import static org.mamute.sanitizer.HtmlSanitizer.sanitize;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
@@ -25,7 +10,16 @@ import org.mamute.model.interfaces.Notifiable;
 import org.mamute.model.interfaces.Votable;
 import org.mamute.providers.SessionFactoryCreator;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.mamute.model.MarkDown.parse;
+import static org.mamute.sanitizer.HtmlSanitizer.sanitize;
+
 @Entity
+@Audited
 public class Comment implements Notifiable, Votable, Flaggable {
     
 	public static final int COMMENT_MIN_LENGTH = 15;

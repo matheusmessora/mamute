@@ -1,17 +1,15 @@
 package org.mamute.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
 import org.mamute.providers.SessionFactoryCreator;
 
+import javax.persistence.*;
+
 @Entity
+@Audited
 public class UserSession {
 	
 	@Id

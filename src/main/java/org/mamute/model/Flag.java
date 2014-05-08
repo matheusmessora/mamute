@@ -1,15 +1,12 @@
 package org.mamute.model;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
+
+import javax.persistence.*;
 
 @Entity
+@Audited
 public class Flag {
 
 	@Id

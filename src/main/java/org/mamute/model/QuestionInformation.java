@@ -1,28 +1,8 @@
 package org.mamute.model;
 
-import static javax.persistence.FetchType.EAGER;
-import static org.mamute.infra.NormalizerBrutal.toSlug;
-import static org.mamute.model.MarkDown.parse;
-import static org.mamute.sanitizer.HtmlSanitizer.sanitize;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Cacheable;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OrderColumn;
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
@@ -30,9 +10,20 @@ import org.mamute.model.interfaces.Moderatable;
 import org.mamute.model.interfaces.Taggable;
 import org.mamute.providers.SessionFactoryCreator;
 import org.mamute.validators.OptionallyEmptyTags;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.FetchType.EAGER;
+import static org.mamute.infra.NormalizerBrutal.toSlug;
+import static org.mamute.model.MarkDown.parse;
+import static org.mamute.sanitizer.HtmlSanitizer.sanitize;
 	
 @Cacheable
 @Entity
+@Audited
 public class QuestionInformation implements Information, Taggable {
 
 	private static final int COMMENT_MIN_LENGTH = 5;

@@ -1,29 +1,23 @@
 package org.mamute.model;
 
-import static javax.persistence.FetchType.EAGER;
-import static org.mamute.model.MarkDown.parse;
-import static org.mamute.sanitizer.HtmlSanitizer.sanitize;
-
-import javax.persistence.Cacheable;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.mamute.model.interfaces.Moderatable;
 import org.mamute.providers.SessionFactoryCreator;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+import static javax.persistence.FetchType.EAGER;
+import static org.mamute.model.MarkDown.parse;
+import static org.mamute.sanitizer.HtmlSanitizer.sanitize;
+
 @Cacheable
 @Entity
+@Audited
 public class AnswerInformation implements Information {
 
 	@Id
@@ -98,7 +92,7 @@ public class AnswerInformation implements Information {
 		this.markedDescription = sanitize(parse(description));
 	}
 
-	public String getDescription() {
+    public String getDescription() {
 		return description;
 	}
 
@@ -176,5 +170,7 @@ public class AnswerInformation implements Information {
 	public void setModeratable(Moderatable moderatable) {
 		this.answer = (Answer) moderatable;
 	}
+
+
 
 }

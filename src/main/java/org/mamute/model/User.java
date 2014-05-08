@@ -1,43 +1,9 @@
 package org.mamute.model;
 
-import static org.mamute.infra.Digester.hashFor;
-import static org.mamute.infra.NormalizerBrutal.toSlug;
-import static org.mamute.sanitizer.HtmlSanitizer.sanitize;
-import static org.mamute.validators.UserPersonalInfoValidator.ABOUT_LENGTH_MESSAGE;
-import static org.mamute.validators.UserPersonalInfoValidator.ABOUT_MAX_LENGTH;
-import static org.mamute.validators.UserPersonalInfoValidator.ABOUT_MIN_LENGTH;
-import static org.mamute.validators.UserPersonalInfoValidator.EMAIL_LENGTH_MESSAGE;
-import static org.mamute.validators.UserPersonalInfoValidator.EMAIL_MAX_LENGTH;
-import static org.mamute.validators.UserPersonalInfoValidator.EMAIL_MIN_LENGTH;
-import static org.mamute.validators.UserPersonalInfoValidator.EMAIL_NOT_VALID;
-import static org.mamute.validators.UserPersonalInfoValidator.LOCATION_LENGTH_MESSAGE;
-import static org.mamute.validators.UserPersonalInfoValidator.LOCATION_MAX_LENGTH;
-import static org.mamute.validators.UserPersonalInfoValidator.MARKED_ABOUT_MAX_LENGTH;
-import static org.mamute.validators.UserPersonalInfoValidator.NAME_LENGTH_MESSAGE;
-import static org.mamute.validators.UserPersonalInfoValidator.NAME_MAX_LENGTH;
-import static org.mamute.validators.UserPersonalInfoValidator.NAME_MIN_LENGTH;
-import static org.mamute.validators.UserPersonalInfoValidator.NAME_REQUIRED;
-import static org.mamute.validators.UserPersonalInfoValidator.REALNAME_LENGTH_MESSAGE;
-import static org.mamute.validators.UserPersonalInfoValidator.WEBSITE_LENGTH_MESSAGE;
-import static org.mamute.validators.UserPersonalInfoValidator.WEBSITE_MAX_LENGHT;
-import static org.mamute.validators.UserPersonalInfoValidator.WEBSITE_MIN_LENGTH;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.enterprise.inject.Vetoed;
-import javax.persistence.Cacheable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -52,11 +18,24 @@ import org.mamute.model.interfaces.Votable;
 import org.mamute.model.watch.Watcher;
 import org.mamute.providers.SessionFactoryCreator;
 
+import javax.enterprise.inject.Vetoed;
+import javax.persistence.*;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mamute.infra.Digester.hashFor;
+import static org.mamute.infra.NormalizerBrutal.toSlug;
+import static org.mamute.sanitizer.HtmlSanitizer.sanitize;
+import static org.mamute.validators.UserPersonalInfoValidator.*;
+
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE, region="cache")
 @Table(name="Users")
 @Entity
 @Vetoed
+@Audited
 public class User implements Identifiable {
 	
 	@Type(type = SessionFactoryCreator.JODA_TIME_TYPE)

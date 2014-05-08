@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
 import org.mamute.infra.NotFoundException;
 import org.mamute.model.interfaces.Moderatable;
@@ -29,6 +30,7 @@ import org.mamute.providers.SessionFactoryCreator;
 import org.owasp.html.HtmlPolicyBuilder;
 
 @Entity
+@Audited
 public class News extends Moderatable implements Post, ViewCountable, Watchable, RssContent, ReputationEventContext {
 	@Id
 	@GeneratedValue

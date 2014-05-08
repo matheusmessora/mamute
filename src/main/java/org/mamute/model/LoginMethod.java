@@ -1,20 +1,15 @@
 package org.mamute.model;
 
-import static org.mamute.validators.UserPersonalInfoValidator.EMAIL_LENGTH_MESSAGE;
-import static org.mamute.validators.UserPersonalInfoValidator.EMAIL_MAX_LENGTH;
-import static org.mamute.validators.UserPersonalInfoValidator.EMAIL_NOT_VALID;
-
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.*;
+
+import static org.mamute.validators.UserPersonalInfoValidator.*;
+
 @Entity
+@Audited
 public class LoginMethod {
 	
 	@Id

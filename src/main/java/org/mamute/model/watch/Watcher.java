@@ -6,11 +6,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
 import org.mamute.model.User;
 import org.mamute.providers.SessionFactoryCreator;
 
 @Entity
+@Audited
 public class Watcher {
 	@GeneratedValue @Id
 	private Long id;

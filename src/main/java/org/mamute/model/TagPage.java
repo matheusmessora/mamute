@@ -9,10 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
+@Audited
 public class TagPage {
 	private static final int DESCRIPTION_MIN_LENGTH = 100;
 

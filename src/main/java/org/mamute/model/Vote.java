@@ -1,19 +1,15 @@
 package org.mamute.model;
 
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
 import org.mamute.providers.SessionFactoryCreator;
 
+import javax.persistence.*;
+import java.util.List;
+
 @Entity
+@Audited
 public class Vote {
     
     @Id @GeneratedValue

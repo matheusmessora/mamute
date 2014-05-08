@@ -1,44 +1,29 @@
 package org.mamute.model;
 
-import static javax.persistence.FetchType.EAGER;
-import static org.hibernate.annotations.CascadeType.SAVE_UPDATE;
-import static org.mamute.sanitizer.QuotesSanitizer.sanitize;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.envers.Audited;
+import org.joda.time.DateTime;
+import org.mamute.model.interfaces.*;
+import org.mamute.model.watch.Watcher;
+import org.mamute.providers.SessionFactoryCreator;
 
+import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
-import org.mamute.model.interfaces.Moderatable;
-import org.mamute.model.interfaces.RssContent;
-import org.mamute.model.interfaces.Taggable;
-import org.mamute.model.interfaces.ViewCountable;
-import org.mamute.model.interfaces.Votable;
-import org.mamute.model.interfaces.Watchable;
-import org.mamute.model.watch.Watcher;
-import org.mamute.providers.SessionFactoryCreator;
+import static javax.persistence.FetchType.EAGER;
+import static org.hibernate.annotations.CascadeType.SAVE_UPDATE;
+import static org.mamute.sanitizer.QuotesSanitizer.sanitize;
 
 @Cacheable
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE, region="cache")
 @Entity
+@Audited
 public class Question extends Moderatable implements Post, Taggable, ViewCountable, Watchable, RssContent, ReputationEventContext {
 	@Id
 	@GeneratedValue
